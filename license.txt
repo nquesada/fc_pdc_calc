@@ -1,0 +1,32 @@
+fc_pdc_calc: Calculates the time-ordered solutions of ultrafast frequency
+conversion / parametric down-conversion and evaluates the process parameters.
+    Copyright (C) 2013  Andreas Christ
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Corresponding publication:
+"Theory of quantum frequency conversion and type-II parametric down-conversion
+in the high gain regime."
+Andreas Christ, Benjamin Brecht, Wolfgang Mauerer, Christine Silberhorn
+New J. Phys. 15 053038 (2013)
+URL: http://iopscience.iop.org/1367-2630/15/5/053038/
+doi:10.1088/1367-2630/15/5/053038
+
+
+This code is based on the works of Wolfgang Mauerer presented in:
+"On Colours, Keys, and Correlations: Multimode Parametric Downconversion in the
+Photon Number Basis."
+PhD thesis, Universität Erlangen-Nürnberg
+http://www.opus.ub.uni-erlangen.de/opus/frontdoor.php?source_opus=1463
