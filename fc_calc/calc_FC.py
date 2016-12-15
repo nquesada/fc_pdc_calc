@@ -173,13 +173,13 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
             + "--C_" + "%.1f" % C + "--pumpWidth_" + "%.5f" % pump_width
 
     filename = directory_name + evaluation_parameters + fc_parameters + ".h5"
-    h5file = tables.openFile(filename, mode = "w", title = "FC-Bog-Prop")
+    h5file = tables.open_file(filename, mode = "w", title = "FC-Bog-Prop")
 
     # Create subgroup for Va, Vc, Ua and Uc
-    groupVa = h5file.createGroup("/", "Va", "z-Position")
-    groupUa = h5file.createGroup("/", "Ua", "z-Position")
-    groupVc = h5file.createGroup("/", "Vc", "z-Position")
-    groupUc = h5file.createGroup("/", "Uc", "z-Position")
+    groupVa = h5file.create_group("/", "Va", "z-Position")
+    groupUa = h5file.create_group("/", "Ua", "z-Position")
+    groupVc = h5file.create_group("/", "Vc", "z-Position")
+    groupUc = h5file.create_group("/", "Uc", "z-Position")
 
     # Generate initial Va and Ua Arrays
 
@@ -189,14 +189,14 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
     print "-> Generating Initial Va"
     print "-> Generating Va initial array at z =", 
     for i in np.arange(zRange.size):
-        h5file.createArray(groupVa, "zPos" + str(i), Vinitial, "z-Position") 
+        h5file.create_array(groupVa, "zPos" + str(i), Vinitial, "z-Position") 
         print i,
     print "finished."
 
     print "-> Generating Initial Ua"
     print "-> Generating Ua initial array at z =",
     for i in np.arange(zRange.size):
-        h5file.createArray(groupUa, "zPos" + str(i), Uinitial, "z-Position") 
+        h5file.create_array(groupUa, "zPos" + str(i), Uinitial, "z-Position") 
         print i,
     print "finished."
 
@@ -204,14 +204,14 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
     print "-> Generating Initial Vc"
     print "-> Generating Vc initial array at z =", 
     for i in np.arange(zRange.size):
-        h5file.createArray(groupVc, "zPos" + str(i), Vinitial, "z-Position") 
+        h5file.create_array(groupVc, "zPos" + str(i), Vinitial, "z-Position") 
         print i,
     print "finished."
 
     print "-> Generating Initial Uc"
     print "-> Generating Uc initial array at z =",
     for i in np.arange(zRange.size):
-        h5file.createArray(groupUc, "zPos" + str(i), Uinitial, "z-Position") 
+        h5file.create_array(groupUc, "zPos" + str(i), Uinitial, "z-Position") 
         print i,
     print "finished."
 
@@ -224,19 +224,19 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
     # exact notation
     Y, X = np.meshgrid(wRange,wRange)
 
-    groupFa = h5file.createGroup("/", "fa", "z Position")
+    groupFa = h5file.create_group("/", "fa", "z Position")
     for i in np.arange(zRange.size):
         famatrix = f_a(X, Y, zRange[i], coupling, A, B, C, pump_width)
-        h5file.createArray(groupFa, "zPos" + str(i), famatrix, "zPos-Set") 
+        h5file.create_array(groupFa, "zPos" + str(i), famatrix, "zPos-Set") 
         print "-> fa array z =", zRange[i], "finished"
 
     print ""
 
     # Actually fc is just a transposed fa with an additional minus sign
-    groupFc = h5file.createGroup("/", "fc", "z Position")
+    groupFc = h5file.create_group("/", "fc", "z Position")
     for i in np.arange(zRange.size):
         fcmatrix = f_c(X, Y, zRange[i], coupling, A, B, C, pump_width)
-        h5file.createArray(groupFc, "zPos" + str(i), fcmatrix, "zPos-Set") 
+        h5file.create_array(groupFc, "zPos" + str(i), fcmatrix, "zPos-Set") 
         print "-> fc array z =", zRange[i], "finished"
 
 
@@ -244,7 +244,7 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
     ## Create numerical first-order solution
     print "# Generating Ra, Rc numerical first-order solution. #"
 
-    groupRafirstItNum = h5file.createGroup("/", "RafirstItNum", "z-Position")
+    groupRafirstItNum = h5file.create_group("/", "RafirstItNum", "z-Position")
     RafirstItTmp = Vinitial.copy()
     for i in np.arange(zRange.size):
 
@@ -254,41 +254,41 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
                 # and instead opt for a pseudo midstep method. Just to be clear 
                 # this isn't a midstep method but gives sufficient results for 
                 # the first step 
-                fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i))
+                fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i))
                 fatmp_0 = fatmpNode_0.read()
                 RafirstItTmp_0 = z_step*np.dot(fatmp_0, Uinitial)*w_step
                 RafirstItTmp = RafirstItTmp_0
-                h5file.createArray(groupRafirstItNum, "zPos" + str(i), RafirstItTmp, "zPos Set") 
+                h5file.create_array(groupRafirstItNum, "zPos" + str(i), RafirstItTmp, "zPos Set") 
 
             if i == 1:
                 ## Trapezoid integration routine for the second data point
-                fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i-1))
-                fatmpNode_1 = h5file.getNode('/fa', 'zPos'+str(i))
+                fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i-1))
+                fatmpNode_1 = h5file.get_node('/fa', 'zPos'+str(i))
                 fatmp_0 = fatmpNode_0.read()
                 fatmp_1 = fatmpNode_1.read()
                 RafirstItTmp_0 = z_step*np.dot(fatmp_0, Uinitial)*w_step
                 RafirstItTmp_1 = z_step*np.dot(fatmp_1, Uinitial)*w_step
                 RafirstItTmp = 0.5 * (RafirstItTmp_0 + RafirstItTmp_1)
-                h5file.createArray(groupRafirstItNum, "zPos" + str(i), RafirstItTmp, "zPos Set") 
+                h5file.create_array(groupRafirstItNum, "zPos" + str(i), RafirstItTmp, "zPos Set") 
 
         else:
             ## Trapezoid integration routine 
-            RafirstItTmp_Node = h5file.getNode('/RafirstItNum', 'zPos'+str(i-1))
+            RafirstItTmp_Node = h5file.get_node('/RafirstItNum', 'zPos'+str(i-1))
             RafirstItTmp = RafirstItTmp_Node.read()
 
-            fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i-1))
-            fatmpNode_1 = h5file.getNode('/fa', 'zPos'+str(i))
+            fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i-1))
+            fatmpNode_1 = h5file.get_node('/fa', 'zPos'+str(i))
             fatmp_0 = fatmpNode_0.read()
             fatmp_1 = fatmpNode_1.read()
             RafirstItTmp_0 = z_step*np.dot(fatmp_0, Uinitial)*w_step
             RafirstItTmp_1 = z_step*np.dot(fatmp_1, Uinitial)*w_step
             RafirstItTmp += 0.5 * (RafirstItTmp_0 + RafirstItTmp_1)
-            h5file.createArray(groupRafirstItNum, "zPos" + str(i), RafirstItTmp, "zPos Set") 
+            h5file.create_array(groupRafirstItNum, "zPos" + str(i), RafirstItTmp, "zPos Set") 
             print "-> RafirstItNum z =", zRange[i], "finished"
 
 
 
-    groupRcfirstItNum = h5file.createGroup("/", "RcfirstItNum", "z Position")
+    groupRcfirstItNum = h5file.create_group("/", "RcfirstItNum", "z Position")
     RcfirstItTmp = Vinitial.copy()
     for i in np.arange(zRange.size):
 
@@ -298,36 +298,36 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
                 # and instead opt for a pseudo midstep method. Just to be clear 
                 # this isn't a midstep method but gives sufficient results for 
                 # the first step 
-                fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i))
+                fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i))
                 fctmp_0 = fctmpNode_0.read()
                 RcfirstItTmp_0 = z_step*np.dot(fctmp_0, Uinitial)*w_step
                 RcfirstItTmp = RcfirstItTmp_0
-                h5file.createArray(groupRcfirstItNum, "zPos" + str(i), RcfirstItTmp, "zPos Set") 
+                h5file.create_array(groupRcfirstItNum, "zPos" + str(i), RcfirstItTmp, "zPos Set") 
 
             if i == 1:
                 ## Trapezoid integration routine for the second data point
-                fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i-1))
-                fctmpNode_1 = h5file.getNode('/fc', 'zPos'+str(i))
+                fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i-1))
+                fctmpNode_1 = h5file.get_node('/fc', 'zPos'+str(i))
                 fctmp_0 = fctmpNode_0.read()
                 fctmp_1 = fctmpNode_1.read()
                 RcfirstItTmp_0 = z_step*np.dot(fctmp_0, Uinitial)*w_step
                 RcfirstItTmp_1 = z_step*np.dot(fctmp_1, Uinitial)*w_step
                 RcfirstItTmp = 0.5 * (RcfirstItTmp_0 + RcfirstItTmp_1)
-                h5file.createArray(groupRcfirstItNum, "zPos" + str(i), RcfirstItTmp, "zPos Set") 
+                h5file.create_array(groupRcfirstItNum, "zPos" + str(i), RcfirstItTmp, "zPos Set") 
 
         else:
             ## Trapezoid integration routine 
-            RcfirstItTmp_Node = h5file.getNode('/RcfirstItNum', 'zPos'+str(i-1))
+            RcfirstItTmp_Node = h5file.get_node('/RcfirstItNum', 'zPos'+str(i-1))
             RcfirstItTmp = RcfirstItTmp_Node.read()
 
-            fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i-1))
-            fctmpNode_1 = h5file.getNode('/fc', 'zPos'+str(i))
+            fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i-1))
+            fctmpNode_1 = h5file.get_node('/fc', 'zPos'+str(i))
             fctmp_0 = fctmpNode_0.read()
             fctmp_1 = fctmpNode_1.read()
             RcfirstItTmp_0 = z_step*np.dot(fctmp_0, Uinitial)*w_step
             RcfirstItTmp_1 = z_step*np.dot(fctmp_1, Uinitial)*w_step
             RcfirstItTmp += 0.5 * (RcfirstItTmp_0 + RcfirstItTmp_1)
-            h5file.createArray(groupRcfirstItNum, "zPos" + str(i), RcfirstItTmp, "zPos Set") 
+            h5file.create_array(groupRcfirstItNum, "zPos" + str(i), RcfirstItTmp, "zPos Set") 
             print "-> RcfirstItNum z =", zRange[i], "finished"
 
 
@@ -337,16 +337,16 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
     ## (These correspond the f function in the exponent of the unitary
     ## transformation creating the analytical solution in the paper)
     print "# Generating Ra, Rc analytical solution. #"
-    groupRafirstItAna= h5file.createGroup("/", "RafirstItAna", "z Position")
+    groupRafirstItAna= h5file.create_group("/", "RafirstItAna", "z Position")
     for i in np.arange(zRange.size):
         RafirstItAna = ra_analytical(X, Y, z_start, zRange[i], coupling, A, B, C, pump_width)
-        h5file.createArray(groupRafirstItAna, "zPos" + str(i), RafirstItAna , "zPos Set") 
+        h5file.create_array(groupRafirstItAna, "zPos" + str(i), RafirstItAna , "zPos Set") 
         print "-> RafirstItAna z =", zRange[i], "finished"
 
-    groupRcfirstItAna= h5file.createGroup("/", "RcfirstItAna", "z Position")
+    groupRcfirstItAna= h5file.create_group("/", "RcfirstItAna", "z Position")
     for i in np.arange(zRange.size):
         RcfirstItAna = rc_analytical(X, Y, z_start, zRange[i], coupling, A, B, C, pump_width)
-        h5file.createArray(groupRcfirstItAna, "zPos" + str(i), RcfirstItAna, "zPos Set") 
+        h5file.create_array(groupRcfirstItAna, "zPos" + str(i), RcfirstItAna, "zPos Set") 
         print "-> RcfirstItAna z =", zRange[i], "finished"
 
 
@@ -376,11 +376,11 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
                     # the first step 
                     
                     # Load old Vc data
-                    VcTmpNode = h5file.getNode('/Vc', 'zPos'+str(i))
+                    VcTmpNode = h5file.get_node('/Vc', 'zPos'+str(i))
                     VcTmp = VcTmpNode.read()
 
-                    fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i))
-                    UaTmpNode_0 = h5file.getNode('/Ua', 'zPos'+str(i))
+                    fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i))
+                    UaTmpNode_0 = h5file.get_node('/Ua', 'zPos'+str(i))
                     fctmp_0 = fctmpNode_0.read()
                     UaTmp_0 = UaTmpNode_0.read()
 
@@ -395,13 +395,13 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
                 if i == 1:
                     ## Trapezoid integration routine for the second data point
-                    VcTmpNode = h5file.getNode('/Vc', 'zPos'+str(i))
+                    VcTmpNode = h5file.get_node('/Vc', 'zPos'+str(i))
                     VcTmp = VcTmpNode.read()
 
-                    fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i-1))
-                    fctmpNode_1 = h5file.getNode('/fc', 'zPos'+str(i))
-                    UaTmpNode_0 = h5file.getNode('/Ua', 'zPos'+str(i-1))
-                    UaTmpNode_1 = h5file.getNode('/Ua', 'zPos'+str(i))
+                    fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i-1))
+                    fctmpNode_1 = h5file.get_node('/fc', 'zPos'+str(i))
+                    UaTmpNode_0 = h5file.get_node('/Ua', 'zPos'+str(i-1))
+                    UaTmpNode_1 = h5file.get_node('/Ua', 'zPos'+str(i))
                     fctmp_0 = fctmpNode_0.read()
                     fctmp_1 = fctmpNode_1.read()
                     UaTmp_0 = UaTmpNode_0.read()
@@ -420,15 +420,15 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
             else:
                 ## Trapezoid integration routine 
-                VcNewTmpNode = h5file.getNode('/Vc', 'zPos'+str(i-1))
-                VcTmpNode = h5file.getNode('/Vc', 'zPos'+str(i))
+                VcNewTmpNode = h5file.get_node('/Vc', 'zPos'+str(i-1))
+                VcTmpNode = h5file.get_node('/Vc', 'zPos'+str(i))
                 VcNewTmp = VcNewTmpNode.read()
                 VcTmp = VcTmpNode.read()
 
-                fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i-1))
-                fctmpNode_1 = h5file.getNode('/fc', 'zPos'+str(i))
-                UaTmpNode_0 = h5file.getNode('/Ua', 'zPos'+str(i-1))
-                UaTmpNode_1 = h5file.getNode('/Ua', 'zPos'+str(i))
+                fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i-1))
+                fctmpNode_1 = h5file.get_node('/fc', 'zPos'+str(i))
+                UaTmpNode_0 = h5file.get_node('/Ua', 'zPos'+str(i-1))
+                UaTmpNode_1 = h5file.get_node('/Ua', 'zPos'+str(i))
                 fctmp_0 = fctmpNode_0.read()
                 fctmp_1 = fctmpNode_1.read()
                 UaTmp_0 = UaTmpNode_0.read()
@@ -461,11 +461,11 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
                     # this isn't a midstep method but gives sufficient results for 
                     # the first step 
                     
-                    UaTmpNode = h5file.getNode('/Ua', 'zPos'+str(i))
+                    UaTmpNode = h5file.get_node('/Ua', 'zPos'+str(i))
                     UaTmp = UaTmpNode.read()
 
-                    fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i))
-                    VcTmpNode_0 = h5file.getNode('/Vc', 'zPos'+str(i))
+                    fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i))
+                    VcTmpNode_0 = h5file.get_node('/Vc', 'zPos'+str(i))
                     fatmp_0 = fatmpNode_0.read()
                     VcTmp_0 = VcTmpNode_0.read()
 
@@ -480,13 +480,13 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
                 if i == 1:
                     ## Trapezoid integration routine for the second data point
-                    UaTmpNode = h5file.getNode('/Ua', 'zPos'+str(i))
+                    UaTmpNode = h5file.get_node('/Ua', 'zPos'+str(i))
                     UaTmp = UaTmpNode.read()
 
-                    fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i-1))
-                    fatmpNode_1 = h5file.getNode('/fa', 'zPos'+str(i))
-                    VcTmpNode_0 = h5file.getNode('/Vc', 'zPos'+str(i-1))
-                    VcTmpNode_1 = h5file.getNode('/Vc', 'zPos'+str(i))
+                    fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i-1))
+                    fatmpNode_1 = h5file.get_node('/fa', 'zPos'+str(i))
+                    VcTmpNode_0 = h5file.get_node('/Vc', 'zPos'+str(i-1))
+                    VcTmpNode_1 = h5file.get_node('/Vc', 'zPos'+str(i))
                     fatmp_0 = fatmpNode_0.read()
                     fatmp_1 = fatmpNode_1.read()
                     VcTmp_0 = VcTmpNode_0.read()
@@ -505,15 +505,15 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
             else:
                 ## Trapezoid integration routine 
-                UaNewTmpNode = h5file.getNode('/Ua', 'zPos'+str(i-1))
-                UaTmpNode = h5file.getNode('/Ua', 'zPos'+str(i))
+                UaNewTmpNode = h5file.get_node('/Ua', 'zPos'+str(i-1))
+                UaTmpNode = h5file.get_node('/Ua', 'zPos'+str(i))
                 UaNewTmp = UaNewTmpNode.read()
                 UaTmp = UaTmpNode.read()
 
-                fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i-1))
-                fatmpNode_1 = h5file.getNode('/fa', 'zPos'+str(i))
-                VcTmpNode_0 = h5file.getNode('/Vc', 'zPos'+str(i-1))
-                VcTmpNode_1 = h5file.getNode('/Vc', 'zPos'+str(i))
+                fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i-1))
+                fatmpNode_1 = h5file.get_node('/fa', 'zPos'+str(i))
+                VcTmpNode_0 = h5file.get_node('/Vc', 'zPos'+str(i-1))
+                VcTmpNode_1 = h5file.get_node('/Vc', 'zPos'+str(i))
                 fatmp_0 = fatmpNode_0.read()
                 fatmp_1 = fatmpNode_1.read()
                 VcTmp_0 = VcTmpNode_0.read()
@@ -562,11 +562,11 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
                     # the first step 
                     
                     # Load old Va data
-                    VaTmpNode = h5file.getNode('/Va', 'zPos'+str(i))
+                    VaTmpNode = h5file.get_node('/Va', 'zPos'+str(i))
                     VaTmp = VaTmpNode.read()
 
-                    fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i))
-                    UcTmpNode_0 = h5file.getNode('/Uc', 'zPos'+str(i))
+                    fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i))
+                    UcTmpNode_0 = h5file.get_node('/Uc', 'zPos'+str(i))
                     fatmp_0 = fatmpNode_0.read()
                     UcTmp_0 = UcTmpNode_0.read()
 
@@ -581,13 +581,13 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
                 if i == 1:
                     ## Trapezoid integration routine for the second data point
-                    VaTmpNode = h5file.getNode('/Va', 'zPos'+str(i))
+                    VaTmpNode = h5file.get_node('/Va', 'zPos'+str(i))
                     VaTmp = VaTmpNode.read()
 
-                    fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i-1))
-                    fatmpNode_1 = h5file.getNode('/fa', 'zPos'+str(i))
-                    UcTmpNode_0 = h5file.getNode('/Uc', 'zPos'+str(i-1))
-                    UcTmpNode_1 = h5file.getNode('/Uc', 'zPos'+str(i))
+                    fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i-1))
+                    fatmpNode_1 = h5file.get_node('/fa', 'zPos'+str(i))
+                    UcTmpNode_0 = h5file.get_node('/Uc', 'zPos'+str(i-1))
+                    UcTmpNode_1 = h5file.get_node('/Uc', 'zPos'+str(i))
                     fatmp_0 = fatmpNode_0.read()
                     fatmp_1 = fatmpNode_1.read()
                     UcTmp_0 = UcTmpNode_0.read()
@@ -606,15 +606,15 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
             else:
                 ## Trapezoid integration routine 
-                VaNewTmpNode = h5file.getNode('/Va', 'zPos'+str(i-1))
-                VaTmpNode = h5file.getNode('/Va', 'zPos'+str(i))
+                VaNewTmpNode = h5file.get_node('/Va', 'zPos'+str(i-1))
+                VaTmpNode = h5file.get_node('/Va', 'zPos'+str(i))
                 VaNewTmp = VaNewTmpNode.read()
                 VaTmp = VaTmpNode.read()
 
-                fatmpNode_0 = h5file.getNode('/fa', 'zPos'+str(i-1))
-                fatmpNode_1 = h5file.getNode('/fa', 'zPos'+str(i))
-                UcTmpNode_0 = h5file.getNode('/Uc', 'zPos'+str(i-1))
-                UcTmpNode_1 = h5file.getNode('/Uc', 'zPos'+str(i))
+                fatmpNode_0 = h5file.get_node('/fa', 'zPos'+str(i-1))
+                fatmpNode_1 = h5file.get_node('/fa', 'zPos'+str(i))
+                UcTmpNode_0 = h5file.get_node('/Uc', 'zPos'+str(i-1))
+                UcTmpNode_1 = h5file.get_node('/Uc', 'zPos'+str(i))
                 fatmp_0 = fatmpNode_0.read()
                 fatmp_1 = fatmpNode_1.read()
                 UcTmp_0 = UcTmpNode_0.read()
@@ -646,11 +646,11 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
                     # this isn't a midstep method but gives sufficient results for 
                     # the first step 
                     
-                    UcTmpNode = h5file.getNode('/Uc', 'zPos'+str(i))
+                    UcTmpNode = h5file.get_node('/Uc', 'zPos'+str(i))
                     UcTmp = UcTmpNode.read()
 
-                    fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i))
-                    VaTmpNode_0 = h5file.getNode('/Va', 'zPos'+str(i))
+                    fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i))
+                    VaTmpNode_0 = h5file.get_node('/Va', 'zPos'+str(i))
                     fctmp_0 = fctmpNode_0.read()
                     VaTmp_0 = VaTmpNode_0.read()
 
@@ -665,13 +665,13 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
                 if i == 1:
                     ## Trapezoid integration routine for the second data point
-                    UcTmpNode = h5file.getNode('/Uc', 'zPos'+str(i))
+                    UcTmpNode = h5file.get_node('/Uc', 'zPos'+str(i))
                     UcTmp = UcTmpNode.read()
 
-                    fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i-1))
-                    fctmpNode_1 = h5file.getNode('/fc', 'zPos'+str(i))
-                    VaTmpNode_0 = h5file.getNode('/Va', 'zPos'+str(i-1))
-                    VaTmpNode_1 = h5file.getNode('/Va', 'zPos'+str(i))
+                    fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i-1))
+                    fctmpNode_1 = h5file.get_node('/fc', 'zPos'+str(i))
+                    VaTmpNode_0 = h5file.get_node('/Va', 'zPos'+str(i-1))
+                    VaTmpNode_1 = h5file.get_node('/Va', 'zPos'+str(i))
                     fctmp_0 = fctmpNode_0.read()
                     fctmp_1 = fctmpNode_1.read()
                     VaTmp_0 = VaTmpNode_0.read()
@@ -690,15 +690,15 @@ def calc_FC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
 
             else:
                 ## Trapezoid integration routine 
-                UcNewTmpNode = h5file.getNode('/Uc', 'zPos'+str(i-1))
-                UcTmpNode = h5file.getNode('/Uc', 'zPos'+str(i))
+                UcNewTmpNode = h5file.get_node('/Uc', 'zPos'+str(i-1))
+                UcTmpNode = h5file.get_node('/Uc', 'zPos'+str(i))
                 UcNewTmp = UcNewTmpNode.read()
                 UcTmp = UcTmpNode.read()
 
-                fctmpNode_0 = h5file.getNode('/fc', 'zPos'+str(i-1))
-                fctmpNode_1 = h5file.getNode('/fc', 'zPos'+str(i))
-                VaTmpNode_0 = h5file.getNode('/Va', 'zPos'+str(i-1))
-                VaTmpNode_1 = h5file.getNode('/Va', 'zPos'+str(i))
+                fctmpNode_0 = h5file.get_node('/fc', 'zPos'+str(i-1))
+                fctmpNode_1 = h5file.get_node('/fc', 'zPos'+str(i))
+                VaTmpNode_0 = h5file.get_node('/Va', 'zPos'+str(i-1))
+                VaTmpNode_1 = h5file.get_node('/Va', 'zPos'+str(i))
                 fctmp_0 = fctmpNode_0.read()
                 fctmp_1 = fctmpNode_1.read()
                 VaTmp_0 = VaTmpNode_0.read()

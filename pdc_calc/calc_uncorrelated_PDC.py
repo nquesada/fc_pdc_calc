@@ -69,7 +69,10 @@ z_steps = 500
 
 
 # Directory to save the data in
-save_directory = "data/raw_data/uncorrelated"
+import os
+currdir=os.getcwd()
+
+save_directory = currdir + "/data/raw_data/uncorrelated"
 
 
 ################################################################
