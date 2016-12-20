@@ -53,6 +53,10 @@ parameters = sys.argv[1:]
 path_to_hdf5_file = parameters[0]
 save_directory = parameters[1]
 
+print path_to_hdf5_file
+print save_directory 
+
+
 (dummy, sep, directory_name) = path_to_hdf5_file.rpartition("/")
 
 directory_name = directory_name.rstrip(".h5")

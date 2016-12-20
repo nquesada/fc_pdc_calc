@@ -53,7 +53,7 @@ w_step = wRange[1] - wRange[0]
 z_step = zRange[1] - zRange[0]
 
 ## Open the corresponding hdf5 data file
-h5file = tables.openFile(path_to_hdf5_file, mode = "r", title = "PDC-Bog-Prop")
+h5file = tables.open_file(path_to_hdf5_file, mode = "r", title = "PDC-Bog-Prop")
 
 
 ## Load Results
@@ -67,15 +67,15 @@ h5file = tables.openFile(path_to_hdf5_file, mode = "r", title = "PDC-Bog-Prop")
 # ua_rig labels the rigorous solution of U_a(w,w') 
 # ub_rig labels the rigorous solution of U_c(w,w') 
 
-ra_ana_node = h5file.getNode('/RafirstItAna', 'zPos'+str(zRange.size-1))
-ra_num_node= h5file.getNode('/RafirstItNum', 'zPos'+str(zRange.size-1))
-rb_ana_node = h5file.getNode('/RbfirstItAna', 'zPos'+str(zRange.size-1))
-rb_num_node= h5file.getNode('/RbfirstItNum', 'zPos'+str(zRange.size-1))
+ra_ana_node = h5file.get_node('/RafirstItAna', 'zPos'+str(zRange.size-1))
+ra_num_node= h5file.get_node('/RafirstItNum', 'zPos'+str(zRange.size-1))
+rb_ana_node = h5file.get_node('/RbfirstItAna', 'zPos'+str(zRange.size-1))
+rb_num_node= h5file.get_node('/RbfirstItNum', 'zPos'+str(zRange.size-1))
 
-va_rig_node = h5file.getNode('/Va', 'zPos'+str(zRange.size-1))
-ua_rig_node = h5file.getNode('/Ua', 'zPos'+str(zRange.size-1))
-vb_rig_node = h5file.getNode('/Vb', 'zPos'+str(zRange.size-1))
-ub_rig_node = h5file.getNode('/Ub', 'zPos'+str(zRange.size-1))
+va_rig_node = h5file.get_node('/Va', 'zPos'+str(zRange.size-1))
+ua_rig_node = h5file.get_node('/Ua', 'zPos'+str(zRange.size-1))
+vb_rig_node = h5file.get_node('/Vb', 'zPos'+str(zRange.size-1))
+ub_rig_node = h5file.get_node('/Ub', 'zPos'+str(zRange.size-1))
 
 ra_ana = ra_ana_node.read()
 ra_num = ra_num_node.read()

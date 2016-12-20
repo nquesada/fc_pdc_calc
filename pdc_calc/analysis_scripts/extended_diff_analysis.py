@@ -86,7 +86,7 @@ Uinitial = np.identity(wRange.size, dtype=complex) / pdc_properties['w_step']
 
 
 ## Open the corresponding hdf5 data file
-h5file = tables.openFile(path_to_hdf5_file, mode = "r", title = "PDC-Bog-Prop")
+h5file = tables.open_file(path_to_hdf5_file, mode = "r", title = "PDC-Bog-Prop")
 
 
 # Calculate and plot the differences between the ana and num solutions 
@@ -94,10 +94,10 @@ h5file = tables.openFile(path_to_hdf5_file, mode = "r", title = "PDC-Bog-Prop")
 diff_ra = []
 diff_rb = []
 for zPos in np.arange(zRange.size):
-    ra_ana_node = h5file.getNode('/RafirstItAna', 'zPos'+str(zPos))
-    ra_num_node = h5file.getNode('/RafirstItNum', 'zPos'+str(zPos))
-    rb_ana_node = h5file.getNode('/RbfirstItAna', 'zPos'+str(zPos))
-    rb_num_node = h5file.getNode('/RbfirstItNum', 'zPos'+str(zPos))
+    ra_ana_node = h5file.get_node('/RafirstItAna', 'zPos'+str(zPos))
+    ra_num_node = h5file.get_node('/RafirstItNum', 'zPos'+str(zPos))
+    rb_ana_node = h5file.get_node('/RbfirstItAna', 'zPos'+str(zPos))
+    rb_num_node = h5file.get_node('/RbfirstItNum', 'zPos'+str(zPos))
 
     ra_ana_zPos = ra_ana_node.read()
     ra_num_zPos = ra_num_node.read()
@@ -117,12 +117,12 @@ diff_ub = []
 diff_va = []
 diff_vb = []
 for zPos in np.arange(zRange.size):
-    ra_ana_node = h5file.getNode('/RafirstItAna', 'zPos'+str(zPos))
-    rb_ana_node = h5file.getNode('/RbfirstItAna', 'zPos'+str(zPos))
-    ua_rig_node = h5file.getNode('/Ua', 'zPos'+str(zPos))
-    va_rig_node = h5file.getNode('/Va', 'zPos'+str(zPos))
-    ub_rig_node = h5file.getNode('/Ub', 'zPos'+str(zPos))
-    vb_rig_node = h5file.getNode('/Vb', 'zPos'+str(zPos))
+    ra_ana_node = h5file.get_node('/RafirstItAna', 'zPos'+str(zPos))
+    rb_ana_node = h5file.get_node('/RbfirstItAna', 'zPos'+str(zPos))
+    ua_rig_node = h5file.get_node('/Ua', 'zPos'+str(zPos))
+    va_rig_node = h5file.get_node('/Va', 'zPos'+str(zPos))
+    ub_rig_node = h5file.get_node('/Ub', 'zPos'+str(zPos))
+    vb_rig_node = h5file.get_node('/Vb', 'zPos'+str(zPos))
 
     ra_ana_zPos = ra_ana_node.read()
     rb_ana_zPos = rb_ana_node.read()
@@ -185,12 +185,12 @@ diff_ub = []
 diff_va = []
 diff_vb = []
 for zPos in np.arange(zRange.size):
-    ra_ana_node = h5file.getNode('/RafirstItAna', 'zPos'+str(zPos))
-    rb_ana_node = h5file.getNode('/RbfirstItAna', 'zPos'+str(zPos))
-    ua_rig_node = h5file.getNode('/Ua', 'zPos'+str(zPos))
-    va_rig_node = h5file.getNode('/Va', 'zPos'+str(zPos))
-    ub_rig_node = h5file.getNode('/Ub', 'zPos'+str(zPos))
-    vb_rig_node = h5file.getNode('/Vb', 'zPos'+str(zPos))
+    ra_ana_node = h5file.get_node('/RafirstItAna', 'zPos'+str(zPos))
+    rb_ana_node = h5file.get_node('/RbfirstItAna', 'zPos'+str(zPos))
+    ua_rig_node = h5file.get_node('/Ua', 'zPos'+str(zPos))
+    va_rig_node = h5file.get_node('/Va', 'zPos'+str(zPos))
+    ub_rig_node = h5file.get_node('/Ub', 'zPos'+str(zPos))
+    vb_rig_node = h5file.get_node('/Vb', 'zPos'+str(zPos))
 
     ra_ana_zPos = ra_ana_node.read()
     rb_ana_zPos = rb_ana_node.read()
