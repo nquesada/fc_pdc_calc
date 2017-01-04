@@ -89,11 +89,11 @@ def grating(z):
 
 def phi_num(x, y, z, A, B, C):
     """ Return the value of the phi function in the differential equation"""
-    return np.exp(-1j * dk(x, y, A, B, C)*z)
+#    return np.exp(-1j * dk(x, y, A, B, C)*z)
 
     # Additional hypergrating to get rid of sinc side peaks:
     # (Currently not used)
-    #return grating(z) * np.exp(-1j * dk(x, y, A, B, C)*z)
+    return grating(z) * np.exp(-1j * dk(x, y, A, B, C)*z)
 
 
 # f function with prefactor 
@@ -159,24 +159,10 @@ def calc_PDC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps,\
             + "--C_" + "%.1f" % C + "--pumpWidth_" + "%.5f" % pump_width
 
 
-#    import os
-#    currdir=os.getcwd()
-
-
     filename = directory_name + evaluation_parameters + pdc_parameters + ".h5"
-    print "**************** HERE ******************"
-    print "**************** HERE ******************"
-    print "**************** HERE ******************"
-    print "**************** HERE ******************"
-    print filename
-    print "**************** HERE ******************"
-    print "**************** HERE ******************"
-    print "**************** HERE ******************"
     
 
-    print "**************** BEFORE ******************"
     h5file = tables.open_file(filename, mode = "w", title = "PDC-Bog-Prop")
-    print "**************** AFTER ******************"
     
     # Create subgroup for Va, Vb, Ua and Ub
     groupVa = h5file.create_group("/", "Va", "z-Position")
