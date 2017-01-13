@@ -190,10 +190,10 @@ f.write("# Squeezing values of the first ten modes (rig) [dB]:\n")
 f.write(str(squeezing(np.arcsinh(vaD_rig[:10]))))
 f.write("\n\n")
 f.write("# Mean photon number (ana):\n")
-f.write("<n> = %.2f" % mean_photon_number_ana)
+f.write("<n> = %.5f" % mean_photon_number_ana)
 f.write("\n")
 f.write("# Mean photon number (rig):\n")
-f.write("<n> = %.2f" % mean_photon_number_rig)
+f.write("<n> = %.5f" % mean_photon_number_rig)
 f.close()
 
 

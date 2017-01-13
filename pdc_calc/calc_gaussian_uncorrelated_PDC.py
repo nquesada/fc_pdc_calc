@@ -23,7 +23,7 @@ paper. The parameters can easily be adapted to simulate a variety of
 different processes"""
 
 import numpy as np
-import calc_PDC
+import calc_gPDC
 
 ###################################################
 ## Parametric down-conversion process parameters ##
@@ -31,7 +31,7 @@ import calc_PDC
 
 # Coupling value giving the overall efficiency of the conversion process.
 # It includes the pump power and the nonlinearity of the medium.
-coupling = 0.75
+#coupling = 0.75
 # Width of the Gaussian pump field amplitude (not intensity) in sigma. 
 pump_width = 0.96231155
 # Inverse group velocity of the pump beam
@@ -44,8 +44,8 @@ C = 1.5
 # z_start gives the beginning of the crystal and z_stop its end
 # (z_start should remain at 0 since the analytic formulas in the code
 # assume a waveguide starting at 0.)
-z_start = 0 
-z_stop = 2
+z_start = -4
+z_stop = 4
 
 
 
@@ -65,14 +65,14 @@ w_steps = 500
 # Sampling steps for the propagation over the length of the crystal
 # (Warning: A too small sampling value will lead to grave errors in the
 # z-integration)
-z_steps = 500
+z_steps = 1000
 
 
 # Directory to save the data in
 import os
 currdir=os.getcwd()
 
-save_directory = currdir + "/data/raw_data/gauss_uncorrelated"
+save_directory = "/export/data2/nquesada/"
 
 
 ################################################################
@@ -80,10 +80,10 @@ save_directory = currdir + "/data/raw_data/gauss_uncorrelated"
 ## and save the end result into a hdf5 file.                  ##
 ################################################################
 
-calc_PDC.calc_PDC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps, A, B, C, pump_width, save_directory)
+#calc_gPDC.calc_PDC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps, A, B, C, pump_width, save_directory)
 
 # Iterate over a range of coupling values
-#coupling_range = np.arange(1.4, 2.1, 0.1)
-#print "coupling_range:", coupling_range
-#for coupling in coupling_range:
-#    calc_PDC.calc_PDC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps, A, B, C, pump_width, save_directory)
+coupling_range = np.arange(0.03,0.25,0.04)
+print "coupling_range:", coupling_range
+for coupling in coupling_range:
+    calc_gPDC.calc_PDC(coupling, w_start, w_stop, w_steps, z_start, z_stop, z_steps, A, B, C, pump_width, save_directory)
